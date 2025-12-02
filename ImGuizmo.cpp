@@ -648,12 +648,12 @@ namespace IMGUIZMO_NAMESPACE
       OuterCircleSize            = 2.0f;
 
       // initialize default colors
-      Colors[DIRECTION_X]           = ImVec4(0.666f, 0.000f, 0.000f, 1.000f);
-      Colors[DIRECTION_Y]           = ImVec4(0.000f, 0.666f, 0.000f, 1.000f);
-      Colors[DIRECTION_Z]           = ImVec4(0.000f, 0.000f, 0.666f, 1.000f);
-      Colors[PLANE_X]               = ImVec4(0.666f, 0.000f, 0.000f, 0.380f);
-      Colors[PLANE_Y]               = ImVec4(0.000f, 0.666f, 0.000f, 0.380f);
-      Colors[PLANE_Z]               = ImVec4(0.000f, 0.000f, 0.666f, 0.380f);
+      Colors[DIRECTION_X]           = ImVec4(0.8f, 0.1f, 0.15f, 1.000f);
+      Colors[DIRECTION_Y]           = ImVec4(0.2f, 0.7f, 0.2f, 1.000f);
+      Colors[DIRECTION_Z]           = ImVec4(0.1f, 0.25f, 0.8f, 1.000f);
+      Colors[PLANE_X]               = ImVec4(0.80f, 0.10f, 0.15f, 0.380f);
+      Colors[PLANE_Y]               = ImVec4(0.20f, 0.70f, 0.2f, 0.380f);
+      Colors[PLANE_Z]               = ImVec4(0.10f, 0.25f, 0.8f, 0.380f);
       Colors[SELECTION]             = ImVec4(1.000f, 0.500f, 0.062f, 0.541f);
       Colors[INACTIVE]              = ImVec4(0.600f, 0.600f, 0.600f, 0.600f);
       Colors[TRANSLATION_LINE]      = ImVec4(0.666f, 0.666f, 0.666f, 0.666f);
@@ -1296,6 +1296,8 @@ namespace IMGUIZMO_NAMESPACE
       gContext.mRadiusSquareCenter = screenRotateSize * gContext.mHeight;
 
       bool hasRSC = Intersects(op, ROTATE_SCREEN);
+      drawList->ChannelsSplit(2);
+      drawList->ChannelsSetCurrent(1);
       for (int axis = 0; axis < 3; axis++)
       {
          if(!Intersects(op, static_cast<OPERATION>(ROTATE_Z >> axis)))
@@ -1334,10 +1336,12 @@ namespace IMGUIZMO_NAMESPACE
             gContext.mRadiusSquareCenter = radiusAxis;
          }
       }
+      drawList->ChannelsSetCurrent(0);
       if(hasRSC && (!gContext.mbUsing || type == MT_ROTATE_SCREEN) && (!isMultipleAxesMasked && isNoAxesMasked))
       {
          drawList->AddCircle(worldToPos(gContext.mModel.v.position, gContext.mViewProjection), gContext.mRadiusSquareCenter, colors[0], 64, gContext.mStyle.RotationOuterLineThickness);
       }
+      drawList->ChannelsMerge();
 
       if (gContext.mbUsing && (gContext.GetCurrentID() == gContext.mEditingID) && IsRotateType(type))
       {
