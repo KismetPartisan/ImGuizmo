@@ -638,13 +638,14 @@ namespace IMGUIZMO_NAMESPACE
    {
       // default values
       TranslationLineThickness   = 3.0f;
-      TranslationLineArrowSize   = 6.0f;
-      RotationLineThickness      = 2.0f;
-      RotationOuterLineThickness = 3.0f;
+      TranslationLineArrowSize   = 12.0f;
+      RotationLineThickness      = 3.0f;
+      RotationOuterLineThickness = 1.0f;
       ScaleLineThickness         = 3.0f;
-      ScaleLineCircleSize        = 6.0f;
+      ScaleLineCircleSize        = 12.0f;
       HatchedAxisLineThickness   = 6.0f;
       CenterCircleSize           = 6.0f;
+      OuterCircleSize            = 2.0f;
 
       // initialize default colors
       Colors[DIRECTION_X]           = ImVec4(0.666f, 0.000f, 0.000f, 1.000f);
@@ -765,8 +766,8 @@ namespace IMGUIZMO_NAMESPACE
       ImGuiID mEditingID = -1;
       OPERATION mOperation = OPERATION(-1);
 
-      bool mAllowAxisFlip = true;
-      float mGizmoSizeClipSpace = 0.1f;
+      bool mAllowAxisFlip = false;
+      float mGizmoSizeClipSpace = 0.15f;
 
       inline ImGuiID GetCurrentID()
       {
@@ -1529,7 +1530,7 @@ namespace IMGUIZMO_NAMESPACE
       }
 
       // draw screen cirle
-      drawList->AddCircle(gContext.mScreenSquareCenter, 20.f, colors[0], 32, gContext.mStyle.CenterCircleSize);
+      drawList->AddCircle(gContext.mScreenSquareCenter, 20.f, colors[0], 32, gContext.mStyle.OuterCircleSize);
 
       if (gContext.mbUsing && (gContext.GetCurrentID() == gContext.mEditingID) && IsScaleType(type))
       {
@@ -1595,7 +1596,7 @@ namespace IMGUIZMO_NAMESPACE
                dir /= d; // Normalize
                dir *= gContext.mStyle.TranslationLineArrowSize;
 
-               ImVec2 ortogonalDir(dir.y, -dir.x); // Perpendicular vector
+               ImVec2 ortogonalDir(dir.y * 0.8f, -dir.x * 0.8f); // Perpendicular vector
                ImVec2 a(worldDirSSpace + dir);
                drawList->AddTriangleFilled(worldDirSSpace - dir, a + ortogonalDir, a - ortogonalDir, colors[i + 1]);
                // Arrow head end
